@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PvP Points Tracker</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center p-6">
+  <div class="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-6">
+    <h1 class="text-2xl font-bold text-center mb-6">PvP Points Tracker</h1>
+
+    <!-- Add Player Form -->
+    <form id="addPlayerForm" class="flex gap-4 mb-6">
+      <input id="playerName" type="text" placeholder="Player Name" class="flex-1 p-2 border rounded-lg" required>
+      <input id="playerPoints" type="number" placeholder="Points" class="w-24 p-2 border rounded-lg" required>
+      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Add</button>
+    </form>
+
+    <!-- Leaderboard -->
+    <div>
+      <h2 class="text-xl font-semibold mb-4">Leaderboard</h2>
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="bg-gray-200">
+            <th class="text-left p-2">Player</th>
+            <th class="text-right p-2">Points</th>
+            <th class="text-right p-2">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard" class="bg-white">
+          <!-- Dynamic rows will be added here -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    const addPlayerForm = document.getElementById('addPlayerForm');
+    const playerNameInput = document.getElementById('playerName');
+    const playerPointsInput = document.getElementById('playerPoints');
+    const leaderboard = document.getElementById('leaderboard');
+
+    let players = []; // Array to store player data
+
+    // Function to render the leaderboard
+    function renderLeaderboard() {
+      leaderboard.innerHTML = '';
+      // Sort players by points in descending order
+      players.sort((a, b) => b.points - a.points);
+      // Create rows for each player
+      players.forEach((player, index) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+          <td class="p-2">${player.name}</td>
+          <td class="p-2 text-right">${player.points}</td>
+          <td class="p-2 text-right">
+            <button onclick="updatePoints(${index}, 10)" class="text-green-500 hover:underline">+10</button>
+            <button onclick="updatePoints(${index}, -10)" class="text-red-500 hover:underline">-10</button>
+            <button onclick="removePlayer(${index})" class="text-gray-500 hover:underline">Remove</button>
+          </td>
+        `;
+        leaderboard.appendChild(row);
+      });
+    }
+
+    // Function to add a new player
+    addPlayerForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = playerNameInput.value.trim();
+      const points = parseInt(playerPointsInput.value);
+      if (name && !isNaN(points)) {
+        players.push({ name, points });
+        renderLeaderboard();
+        addPlayerForm.reset();
+      }
+    });
+
+    // Function to update points for a player
+    function updatePoints(index, change) {
+      players[index].points += change;
+      renderLeaderboard();
+    }
+
+    // Function to remove a player
+    function removePlayer(index) {
+      players.splice(index, 1);
+      renderLeaderboard();
+    }
+  </script>
+</body>
+</html>
