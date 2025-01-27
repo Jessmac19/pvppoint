@@ -1,92 +1,128 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PvP Points Tracker</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 min-h-screen flex flex-col items-center p-6">
-  <div class="w-full max-w-2xl bg-white shadow-xl rounded-2xl p-6">
-    <h1 class="text-2xl font-bold text-center mb-6">PvP Points Tracker</h1>
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>PVP Trade Points Calcluator</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body class="bg-neutral-900 min-h-screen min-w-screen text-white font-mono flex flex-col">
+    <div class="bg-teal-800 px-4 text-end lg:text-center py-2 text-2xl font-bold absolute w-full top-0 left-0">
+      <a href="/"><h1>Hyperdata.info</h1></a>
+    </div>
+    <div class="absolute top-0 left-0 pl-4 pt-3 font-semibold flex gap-2">
+      <a class="flex flex-row gap-1" href="/pvp-points/index.html">
+        PVP Points
+      </a>
+      
+    </div>
+    <div class="py-8"></div>
+    
+  
+  <div class="px-2">
+  <div class="rounded border-solid border-neutral-600 border flex flex-col p-1">
+    <div class="flex flex-col gap-4 align-middle">
+      <h3 class="text-2xl font-semibold">PVP Trade Points Calculator</h3>
+      
+<div class="flex flex-row flex-wrap justify-center gap-4 pb-10 pt-4">
+  <div class="flex flex-col gap-4 align-middle text-center text-lg font-semibold">
+    <div>PVP Points are worth <span id="pvp-point-value">$100</span></div>
 
-    <!-- Add Player Form -->
-    <form id="addPlayerForm" class="flex gap-4 mb-6">
-      <input id="playerName" type="text" placeholder="Player Name" class="flex-1 p-2 border rounded-lg" required>
-      <input id="playerPoints" type="number" placeholder="Points" class="w-24 p-2 border rounded-lg" required>
-      <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">Add</button>
-    </form>
+    <div class="font-light text-sm">with</div>
 
-    <!-- Leaderboard -->
-    <div>
-      <h2 class="text-xl font-semibold mb-4">Leaderboard</h2>
-      <table class="w-full border-collapse">
-        <thead>
-          <tr class="bg-gray-200">
-            <th class="text-left p-2">Player</th>
-            <th class="text-right p-2">Points</th>
-            <th class="text-right p-2">Actions</th>
-          </tr>
-        </thead>
-        <tbody id="leaderboard" class="bg-white">
-          <!-- Dynamic rows will be added here -->
-        </tbody>
-      </table>
+    
+    
+    
+<div class="flex flex-row gap-2 flex-wrap justify-center md:justify-normal items-center">
+  <div class="min-w-32 text-left">Market Cap:</div>
+  <div id=pvp-market-cap 
+    class="rounded border p-1 relative min-w-64 border-neutral-600 min-h-8 
+    cursor-pointer hover:border-neutral-500 focus:border-neutral-500
+    flex flex-row justify-between"
+  >
+    <div id="pvp-market-cap-value"></div>
+    <div class="justify-self-end" id="pvp-market-cap-chevron">
+      <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="lucide lucide-chevron-down"
+>
+  <path d="m6 9 6 6 6-6" />
+</svg>
+
     </div>
   </div>
+</div>
 
-  <script>
-    const addPlayerForm = document.getElementById('addPlayerForm');
-    const playerNameInput = document.getElementById('playerName');
-    const playerPointsInput = document.getElementById('playerPoints');
-    const leaderboard = document.getElementById('leaderboard');
+    
+    
+    
+<div class="flex flex-row gap-2 flex-wrap justify-center md:justify-normal items-center">
+  <div class="min-w-32 text-left">% Airdrop:</div>
+  <div id=pct-airdrop 
+    class="rounded border p-1 relative min-w-64 border-neutral-600 min-h-8 
+    cursor-pointer hover:border-neutral-500 focus:border-neutral-500
+    flex flex-row justify-between"
+  >
+    <div id="pct-airdrop-value"></div>
+    <div class="justify-self-end" id="pct-airdrop-chevron">
+      <svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  class="lucide lucide-chevron-down"
+>
+  <path d="m6 9 6 6 6-6" />
+</svg>
 
-    let players = []; // Array to store player data
+    </div>
+  </div>
+</div>
+  </div>
 
-    // Function to render the leaderboard
-    function renderLeaderboard() {
-      leaderboard.innerHTML = '';
-      // Sort players by points in descending order
-      players.sort((a, b) => b.points - a.points);
-      // Create rows for each player
-      players.forEach((player, index) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-          <td class="p-2">${player.name}</td>
-          <td class="p-2 text-right">${player.points}</td>
-          <td class="p-2 text-right">
-            <button onclick="updatePoints(${index}, 10)" class="text-green-500 hover:underline">+10</button>
-            <button onclick="updatePoints(${index}, -10)" class="text-red-500 hover:underline">-10</button>
-            <button onclick="removePlayer(${index})" class="text-gray-500 hover:underline">Remove</button>
-          </td>
-        `;
-        leaderboard.appendChild(row);
-      });
-    }
+  <div class="flex-col border-l border-neutral-600 hidden md:flex"></div>
 
-    // Function to add a new player
-    addPlayerForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = playerNameInput.value.trim();
-      const points = parseInt(playerPointsInput.value);
-      if (name && !isNaN(points)) {
-        players.push({ name, points });
-        renderLeaderboard();
-        addPlayerForm.reset();
-      }
-    });
+  <div class="flex flex-col gap-4 align-middle text-center text-lg font-semibold">
+    <div id="pvp-users-point-value">Your Points are worth $1000</div>
 
-    // Function to update points for a player
-    function updatePoints(index, change) {
-      players[index].points += change;
-      renderLeaderboard();
-    }
+    <div class="font-light text-sm">with</div>
 
-    // Function to remove a player
-    function removePlayer(index) {
-      players.splice(index, 1);
-      renderLeaderboard();
-    }
-  </script>
-</body>
+    <div class="flex flex-row gap-2 items-center flex-wrap justify-center sm:justify-normal">
+      <div>
+        Your Points:
+      </div>
+      <input 
+        type="number" 
+        id="pvp-user-points" 
+        class="rounded border-solid border border-neutral-600 p-1 min-w-32 
+        bg-neutral-900 focus:border-neutral-500 outline-none hover:border-neutral-500" 
+        value=10
+      />
+    </div>
+
+    
+    
+  </div>
+</div>
+
+    </div>
+  </div>
+</div>
+
+
+    <script src=../pvp-points.js></script>
+  </body>
 </html>
